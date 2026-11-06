@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Xiaohongshu Note Evaluator",
+    "description": "A floating ball in the sidebar browser that predicts a Xiaohongshu note's reads and engagement with several host models and returns adjustment directions, not rewritten copy."
+  }
+}

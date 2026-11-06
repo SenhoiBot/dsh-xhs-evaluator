@@ -1,0 +1,49 @@
+{
+  "name": "@local/dsh-xhs-evaluator",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Xiaohongshu note evaluator for the DSH sidebar browser: a floating ball that rates a draft with several host models, predicts reads/likes/collects/comments and returns adjustment directions instead of rewritten copy.",
+  "author": "SenhoiBot <senhoi@qq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SenhoiBot/dsh-xhs-evaluator.git"
+  },
+  "homepage": "https://github.com/SenhoiBot/dsh-xhs-evaluator#readme",
+  "bugs": {
+    "url": "https://github.com/SenhoiBot/dsh-xhs-evaluator/issues"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "dsh-plugin",
+    "xiaohongshu"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "lib",
+    "locale/*.json",
+    "icon.svg",
+    "cordis.patch.yml",
+    "README.md",
+    "DESIGN.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true
+    }
+  }
+}

@@ -1,0 +1,19 @@
+# dsh-xhs-evaluator bundle layer: one host row.
+#
+# The row registers the `/xhs/*` bridge routes on the DSH web server and calls
+# the host `llm` service for the evaluation ensemble. No API key lives in the
+# plugin. The optional profile config documents itself in README.md:
+#
+#   - id: dsh-xhs-evaluator
+#     config:
+#       ensemble: 2
+#       provider: deepseek-account
+#       model: deepseek-flash
+#       allowAllHosts: false       # 默认 false：只有 xiaohongshu.com 及其子域显示悬浮球
+#       models:
+#         - provider: deepseek-account
+#           model: deepseek-reasoner
+#           label: deepseek-reasoner
+- insert:
+    - id: dsh-xhs-evaluator
+      name: '@local/dsh-xhs-evaluator'
