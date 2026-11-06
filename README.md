@@ -133,12 +133,17 @@ Host：index.js → lib/service.js → lib/routes.js（ctx.webServer 上的 /xhs
 - **修改指引**是唯一允许"具体文案"的地方：模型把示例写在 `guide.sections[].example`（宿主动态截断到 50 字），
   前端一律渲染成 `（例：…）` 括注；`advice` 仍然是"怎么选"，不是成稿。多模型时取质量最接近中位数的那份为主，
   其余模型补齐缺失的模块（不足 3 块就当没有指引）。
+- **宿主接线（v0.2.1 修复）**：`index.js` 用 `inject = ['llm', 'webServer']` 把 web-server 声明成硬依赖。
+  profile bundle 行比 web-server 服务更早挂载，早先 best-effort 地 `ctx.get('webServer')` 会在 `apply` 时拿到
+  `undefined`，于是 `/xhs/*` 路由被静默跳过（翻译插件是在 `await` 之后注册才躲过这个竞态）。改成注入后 Cordis
+  会等服务就绪再调用 `apply`；`test/index.test.mjs` 锁住这条约定。
 
 ## 验收证据
 
 | 检查 | 结果 |
 | --- | --- |
-| 单元/集成测试 `node --test --test-isolation=none test/*.test.mjs` | **133 个全过**（evaluate 37 / llm 25 / page-script 35 / routes 9 / service 13 / hosts 6 / client 8） |
+| 单元/集成测试 `node --test --test-isolation=none test/*.test.mjs` | **135 个全过**（evaluate 37 / llm 25 / page-script 35 / routes 9 / service 13 / hosts 6 / client 8 / index 2） |
+| 宿主路由注册（v0.2.1 修复后实测） | 重启后在干净的 DSH 实例上 `GET /xhs/state` → `200 {"ok":true,"version":"0.2.1",…,"allowAllHosts":false,"build":"…"}`，`GET /xhs/hosted.js` → 200（约 95 KB）；修复前两路由均为 404 |
 | 站点门禁 | 白名单/伪装域用例（`xiaohongshu.com.evil.com` 等）、非小红书页面不挂载用例、about:blank 由 host 注入 URL 的用例、`allowAllHosts` 开关用例全部通过；页面脚本与 `lib/hosts.js` 判定逐条一致 |
 | 真机注入（desktop profile，`~/.dsh/xhs-evaluator.log`） | `webviews:{count:1}` → `inject:installed` → `configure:{models:[…]}`：球确实画在了右侧内置浏览器的页面上（用户已看到） |
 | 真实宿主路由 `e2e/live.mjs`（真模型，偏弱稿 + `--revise`） | **24/24 checks passed**：判定、预测区间、方向、修改指引五节，再跑一键整改 |

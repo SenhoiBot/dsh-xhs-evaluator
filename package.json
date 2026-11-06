@@ -1,6 +1,6 @@
 {
   "name": "@local/dsh-xhs-evaluator",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "description": "Xiaohongshu note evaluator for the DSH sidebar browser: a floating ball that rates a draft with several host models, predicts reads/likes/collects/comments and returns adjustment directions instead of rewritten copy.",

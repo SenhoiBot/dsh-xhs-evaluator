@@ -4,7 +4,7 @@
 点击悬浮球 → 填入想发布的图文 → 调用 N 个 DSH 宿主模型 → 预测阅读量/点赞/收藏/评论
 → 数据差时给出「调整方向」（只给方向，绝不代写内容）。
 
-Package: `@local/dsh-xhs-evaluator` · row id: `dsh-xhs-evaluator` · version `0.2.0`.
+Package: `@local/dsh-xhs-evaluator` · row id: `dsh-xhs-evaluator` · version `0.2.1`.
 
 ## Runtime path (do not change)
 
@@ -23,6 +23,16 @@ Host：index.js → lib/service.js → lib/routes.js (ctx.webServer)
 ```
 
 `page-script.js` **不做任何网络请求**；模型调用全部在 Host。
+
+## Host wiring (v0.2.1)
+
+`index.js` declares `inject = ['llm', 'webServer']`. The web-server dependency is a
+hard injection, not a best-effort `ctx.get('webServer')`: profile bundle rows mount
+before the web-server service is constructed, so a synchronous route registration
+inside `apply` observes `undefined` and silently skips every `/xhs/*` route (the
+page translator avoids the race only because it registers its routes after an
+`await`). With the injection in place Cordis calls `apply` once the service exists,
+so the bridge always mounts; `test/index.test.mjs` locks the contract in.
 
 ## Site gate (v0.2.0)
 
